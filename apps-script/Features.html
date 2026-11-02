@@ -7,6 +7,7 @@
 .workspace-menu button:hover { background:#ededeb; }
 .workspace-menu button[aria-selected=true] { color:#184b37; background:#e1eae2; font-weight:700; }
 .workspace-pane { min-width:0; }
+.workspace-caption { display:none; }
 .workspace-pane .panel { margin:0 0 16px; }
 .workspace-pane form { max-width:780px; }
 .workspace-pane .manage-form { grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
@@ -26,6 +27,7 @@
 @media (prefers-reduced-motion:no-preference) { .workspace-pane:not([hidden]) { animation:workspace-in 250ms cubic-bezier(.22,1,.36,1); } @keyframes workspace-in { from { opacity:.65; transform:translateY(4px); } } }
 @media(max-width:760px) {
  .workspace { grid-template-columns:minmax(0,1fr); gap:14px; }
+ .workspace-caption { display:block; margin:0 0 -8px; font-size:.8rem; color:#57645b; }
  .workspace-menu { display:flex; overflow-x:auto; position:static; padding:5px; }
  .workspace-menu button { white-space:nowrap; flex:none; }
  .workspace-menu b { display:none; }
@@ -128,7 +130,10 @@ function organizeManagerPanels(root) {
  menu.setAttribute('role','tablist');
  menu.setAttribute('aria-label','หมวดจัดการเว็บไซต์');
  const panels=document.createElement('div');
- workspace.append(menu,panels);
+ const caption=document.createElement('p');
+ caption.className='workspace-caption';
+ caption.textContent='หมวดจัดการ · เลื่อนแถบเพื่อดูทุกหมวด';
+ workspace.append(caption,menu,panels);
  const mobile=matchMedia('(max-width:760px)');
  function activate(id) {
   activeManagerTab=id;
