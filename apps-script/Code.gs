@@ -63,7 +63,25 @@ function setupGoogleStorage() {
     return {spreadsheet:ss.getUrl()};
   });
 }
-function doGet() {
+function json_(value) {
+  return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON);
+}
+// Only these public operations are exposed to the Vercel server. Admin RPCs stay in Google.
+function publicRequest_(method,args) {
+  if (method==='getPublicData') return {...getPublicData(),isAdmin:false};
+  if (method==='getNewsImage') return getNewsImage(args[0]);
+  if (method==='registerParticipant') return registerParticipant(args[0]);
+  throw new Error('ไม่อนุญาตการทำรายการนี้');
+}
+function doPost(e) {
+  try {
+    if (!e || !e.postData || e.postData.contents.length>12000) throw new Error('คำขอไม่ถูกต้อง');
+    const body=JSON.parse(e.postData.contents);
+    if (!Array.isArray(body.args)||body.args.length>1) throw new Error('คำขอไม่ถูกต้อง');
+    return json_({ok:true,data:publicRequest_(body.method,body.args)});
+  } catch(error) { return json_({ok:false,error:String(error.message||'ไม่สามารถทำรายการได้')}); }
+}
+function doGet(e) {
   let html=HtmlService.createHtmlOutputFromFile('Index').getContent();
   for (const name of ['logo','mascot']) {
     const id=PropertiesService.getScriptProperties().getProperty('ASSET_'+name);
