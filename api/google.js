@@ -1,4 +1,4 @@
-const ALLOWED = new Set(['getPublicData', 'registerParticipant', 'getNewsImage']);
+const ALLOWED = new Set(['getPublicData', 'registerParticipant', 'registerCoordinator', 'getNewsImage']);
 module.exports = async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') {
@@ -29,7 +29,7 @@ module.exports = async function handler(req, res) {
     // Never forward an admin flag or private collections through the public site.
     if (body.method==='getPublicData') {
       if (!Array.isArray(result.data.sports)||!Array.isArray(result.data.articles)||!Array.isArray(result.data.scores)) throw new Error('Invalid public data');
-      return res.status(200).json({ok:true,data:{sports:result.data.sports,articles:result.data.articles,scores:result.data.scores,isAdmin:false}});
+      return res.status(200).json({ok:true,data:{sports:result.data.sports,articles:result.data.articles,scores:result.data.scores,teams:result.data.teams,events:result.data.events,isAdmin:false}});
     }
     return res.status(200).json(result);
   } catch {

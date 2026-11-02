@@ -1,5 +1,9 @@
 const OWNER_EMAIL = 'dh.satun@gmail.com';
 const TABLES = {
+  Events:['eventKey','sport','startsAt','venue','status','label'],
+  Users:['id','lineName','picture','role','status','created','updated'],
+  CoordinatorLog:['id','requestId','team','sport','contacts','created','action','actor'],
+  AuditLog:['id','actor','action','target','created'],
   Sports: ['id','name','short','icon','color','dates'],
   News: ['id','type','title','body','date','tone','art','imageId'],
   Scores: ['eventKey','teamA','teamB','a','b'],
@@ -7,6 +11,7 @@ const TABLES = {
   Media: ['id','name','mimeType','created']
 };
 function requireAdmin_() {
+  if (typeof lineActor_!=='undefined' && lineActor_) { const user=lineUser_();if(user&&user.status==='active'&&['owner','manager'].includes(user.role))return;throw new Error('บัญชีนี้ยังไม่มีสิทธิ์ผู้จัดการ'); }
   if (Session.getActiveUser().getEmail().toLowerCase() !== OWNER_EMAIL) throw new Error('ต้องลงชื่อเข้าใช้ด้วยบัญชีผู้ดูแล '+OWNER_EMAIL);
 }
 function locked_(fn) {
@@ -59,6 +64,7 @@ function setupGoogleStorage() {
     }
     if (!rows_('Sports').length) SEED_SPORTS.forEach(s=>append_('Sports',{...s,dates:JSON.stringify(s.dates)}));
     if (!rows_('News').length) SEED_NEWS.forEach(n=>append_('News',n));
+    if(!rows_('Events').length)publicEvents_().forEach(e=>append_('Events',e));
     console.log(JSON.stringify({spreadsheet:ss.getUrl(),folder:'https://drive.google.com/drive/folders/'+props.getProperty('DRIVE_FOLDER_ID')}));
     return {spreadsheet:ss.getUrl()};
   });
@@ -69,20 +75,23 @@ function json_(value) {
 // Only these public operations are exposed to the Vercel server. Admin RPCs stay in Google.
 function publicRequest_(method,args) {
   if (method==='getPublicData') return {...getPublicData(),isAdmin:false};
+  if (method==='registerCoordinator') return registerCoordinator(args[0]);
   if (method==='getNewsImage') return getNewsImage(args[0]);
   if (method==='registerParticipant') return registerParticipant(args[0]);
   throw new Error('ไม่อนุญาตการทำรายการนี้');
 }
 function doPost(e) {
   try {
-    if (!e || !e.postData || e.postData.contents.length>12000) throw new Error('คำขอไม่ถูกต้อง');
+    if (!e || !e.postData || e.postData.contents.length>2900000) throw new Error('คำขอไม่ถูกต้อง');
     const body=JSON.parse(e.postData.contents);
+    if(body.payload)return json_({ok:true,data:signedRequest_(body)});
+    if(e.postData.contents.length>12000)throw new Error('คำขอใหญ่เกินกำหนด');
     if (!Array.isArray(body.args)||body.args.length>1) throw new Error('คำขอไม่ถูกต้อง');
     return json_({ok:true,data:publicRequest_(body.method,body.args)});
   } catch(error) { return json_({ok:false,error:String(error.message||'ไม่สามารถทำรายการได้')}); }
 }
 function doGet(e) {
-  let html=HtmlService.createHtmlOutputFromFile('Index').getContent();
+  let html=HtmlService.createHtmlOutputFromFile('Index').getContent().replace('<!-- FEATURES -->',HtmlService.createHtmlOutputFromFile('Features').getContent());
   for (const name of ['logo','mascot']) {
     const id=PropertiesService.getScriptProperties().getProperty('ASSET_'+name);
     if (!id) throw new Error('กรุณาเรียก setupGoogleStorage ก่อนเปิดเว็บไซต์');
@@ -92,7 +101,7 @@ function doGet(e) {
   return HtmlService.createHtmlOutput(html).setTitle('กีฬา สา’สุข สตูล 2570').addMetaTag('viewport','width=device-width, initial-scale=1');
 }
 function getPublicData() {
-  return {sports:rows_('Sports').map(s=>({...s,dates:JSON.parse(s.dates)})),articles:rows_('News').reverse(),scores:rows_('Scores'),isAdmin:Session.getActiveUser().getEmail().toLowerCase()===OWNER_EMAIL};
+  return {teams:TEAM_COLORS,events:publicEvents_(),sports:rows_('Sports').map(s=>({...s,dates:JSON.parse(s.dates)})),articles:rows_('News').reverse(),scores:rows_('Scores'),isAdmin:Session.getActiveUser().getEmail().toLowerCase()===OWNER_EMAIL};
 }
 function text_(value,max,required=true) {
   if (typeof value!=='string' || value.length>max || (required&&!value.trim())) throw new Error('ข้อมูลไม่ครบหรือยาวเกินกำหนด');
@@ -115,7 +124,7 @@ function getRegistrations() { requireAdmin_(); return rows_('Registrations'); }
 function saveScore(data) {
   requireAdmin_();
   const obj={eventKey:text_(data.eventKey,80),teamA:text_(data.teamA,120),teamB:text_(data.teamB,120)};
-  const valid=rows_('Sports').some(s=>JSON.parse(s.dates).some(([m,d])=>`${s.id}-${m}-${d}`===obj.eventKey));
+  const valid=publicEvents_().some(e=>e.eventKey===obj.eventKey);
   if (!valid) throw new Error('ไม่พบรายการแข่งขัน');
   for (const k of ['a','b']) { if (!Number.isInteger(data[k])||data[k]<0||data[k]>10000) throw new Error('คะแนนไม่ถูกต้อง'); obj[k]=data[k]; }
   return locked_(()=>{
