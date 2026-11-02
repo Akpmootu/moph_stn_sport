@@ -1,0 +1,6 @@
+{
+  "name": "satun-sports-google",
+  "private": true,
+  "scripts": {"test": "node --test tests/*.test.cjs", "check": "node tools/check.cjs"},
+  "engines": {"node": ">=20"}
+}
