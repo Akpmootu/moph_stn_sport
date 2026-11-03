@@ -33,6 +33,88 @@
  .workspace-menu b { display:none; }
  .workspace-pane .manage-form { grid-template-columns:minmax(0,1fr); }
 }
+#view-register { --reg-ink:#262722; --reg-muted:#65655e; --reg-line:#deded7; --reg-wash:#f5f5f1; color:var(--reg-ink); }
+#view-register .reg-label { font:600 .72rem/1.6 ui-monospace,monospace; color:var(--reg-muted); letter-spacing:.055em; }
+#view-register .reg-header { margin:clamp(26px,4vw,55px) 0 0; padding:0 0 clamp(20px,3vw,38px); border-bottom:1px solid var(--reg-line); }
+#view-register .reg-header h1 { margin:10px 0 6px; font-size:clamp(1.85rem,3.7vw,3rem); color:var(--reg-ink); }
+#view-register .reg-header p { color:var(--reg-muted); }
+#coordinatorWizard,#legacyRegistration .form-shell { display:grid; grid-template-columns:clamp(170px,19vw,230px) minmax(0,1fr); align-items:start; gap:clamp(20px,4vw,58px); margin-top:26px; }
+#view-register .reg-index,#view-register .reg-legacy-index { position:sticky; top:95px; padding:10px 0; }
+#view-register .wizard-progress { display:grid; padding:0; margin:12px 0 0; gap:4px; list-style:none; }
+#view-register .wizard-progress li { background:transparent; border-radius:0; padding:0; }
+#view-register .wizard-progress button,#view-register .reg-legacy-index a { display:flex; align-items:center; gap:10px; width:100%; min-height:44px; padding:8px 10px; border:0; border-radius:4px; background:transparent; color:var(--reg-muted); text-decoration:none; text-align:left; font:inherit; font-size:.9rem; }
+#view-register .reg-number,#view-register .reg-legacy-index b { display:grid; place-items:center; min-width:25px; height:25px; color:inherit; font:500 .75rem ui-monospace,monospace; }
+#view-register .wizard-progress button[aria-current] { background:#eaeae5; color:var(--reg-ink); font-weight:750; }
+#view-register .wizard-progress button[aria-current] .reg-number { color:white; background:var(--reg-ink); border-radius:3px; }
+#view-register .wizard-progress button:disabled { cursor:default; opacity:.68; }
+#view-register .wizard-progress button:not(:disabled):hover,#view-register .reg-legacy-index a:hover { background:var(--reg-wash); }
+#view-register .reg-sheet,#legacyRegistration .form-card { min-width:0; background:white; border:1px solid var(--reg-line); border-radius:6px; padding:clamp(18px,3.3vw,42px); box-shadow:none; }
+#view-register .reg-sheet h2 { font-size:clamp(1.4rem,2.5vw,2rem); margin:5px 0 2px; color:var(--reg-ink); scroll-margin-top:100px; outline:none; }
+#view-register .reg-hint,#view-register .summary-agency { color:var(--reg-muted); }
+#view-register .choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 22px; margin:22px 0 0; }
+#view-register .choice-card { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-content:center; align-items:center; gap:0 12px; background:white; color:var(--reg-ink); border:0; border-top:1px solid var(--reg-line); border-radius:0; min-height:82px; padding:12px 6px; box-shadow:none; transform:none; transition:background-color 150ms ease-out; }
+#view-register .choice-card:hover,#view-register .choice-card[aria-pressed=true] { background:var(--reg-wash); box-shadow:none; }
+#view-register .choice-card::after { content:'›'; color:var(--reg-muted); font:1.25rem/1 system-ui; grid-column:3; grid-row:1/3; }
+#view-register .choice-card[aria-pressed=true]::after { content:'✓'; color:var(--reg-ink); }
+#view-register .team-dot { grid-row:1/3; width:15px; height:15px; border-radius:4px; margin:0; box-shadow:inset 0 0 0 1px #0002; }
+#view-register .choice-card strong { grid-column:2; line-height:1.45; font-size:1rem; }
+#view-register .choice-card small { grid-column:2; font-size:.84rem; color:var(--reg-muted); line-height:1.55; margin:3px 0 0; }
+#view-register .sport-symbol { grid-column:1; font-size:1.2rem; }
+#view-register #sportChoices .choice-card { min-height:62px; }
+#view-register .contact-row { padding:14px 0; border-bottom:1px solid var(--reg-line); margin:0 0 10px; }
+#view-register .contact-row label { font-size:.9rem; }
+#view-register .contact-row input,#view-register .field :is(input,select,textarea) { background:white; border:1px solid #aaa9a2; border-radius:4px; min-height:44px; font-size:1rem; color:var(--reg-ink); }
+#view-register .reg-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:8px; padding-top:18px; border-top:1px solid var(--reg-line); margin-top:22px; }
+#view-register .btn { min-height:44px; border-radius:4px; }
+#view-register .btn-outline { border:1px solid var(--reg-line); background:white; color:var(--reg-ink); }
+#view-register :is(.btn-lime,.btn-sky) { background:var(--reg-ink); border:1px solid var(--reg-ink); color:white; }
+#view-register .consent { color:var(--reg-ink); font-size:.92rem; }
+#view-register input[type=checkbox] { accent-color:var(--reg-ink); }
+#view-register .summary-list { padding:0; list-style:none; margin:12px 0 18px; }
+#view-register .summary-list li { display:flex; flex-wrap:wrap; gap:4px 22px; justify-content:space-between; border-top:1px solid var(--reg-line); padding:10px 0; margin:0; }
+#view-register .summary-list span { font-variant-numeric:tabular-nums; }
+#registrationSummary { margin:18px 0; overflow-wrap:anywhere; }
+#view-register #registrationError { color:#96352b; }
+#view-register .receipt-card { background:white; border:1px solid var(--reg-line); border-top:3px solid var(--team-color); border-radius:5px; color:var(--reg-ink); box-shadow:none; }
+#view-register #receiptStep { max-width:850px; margin:26px auto 0; }
+#view-register .receipt-code { color:var(--reg-ink); font-family:ui-monospace,monospace; }
+#legacyRegistration .form-card { grid-area:1/2; }
+#view-register .reg-legacy-index { grid-area:1/1; }
+#legacyRegistration .form-note { background:var(--reg-wash); border-left:2px solid #96968e; color:var(--reg-muted); }
+#view-register :is(button,a,input,select,textarea):focus-visible { outline:2px solid var(--reg-ink); outline-offset:2px; }
+@media (prefers-reduced-motion:no-preference) { #coordinatorWizard section:not([hidden]) { animation:registration-page 180ms cubic-bezier(.22,1,.36,1); } @keyframes registration-page { from { opacity:.65; transform:translateY(4px); } } }
+@media (max-width:760px) {
+ #coordinatorWizard,#legacyRegistration .form-shell { grid-template-columns:minmax(0,1fr); gap:14px; margin-top:12px; }
+ #view-register .reg-index,#view-register .reg-legacy-index { position:static; padding:0; }
+ #view-register .reg-index>.reg-label,#view-register .reg-legacy-index { display:none; }
+ #view-register .wizard-progress { grid-template-columns:repeat(4,minmax(0,1fr)); gap:3px; margin:0; }
+ #view-register .wizard-progress button { display:grid; justify-items:start; align-content:start; gap:1px; height:100%; padding:5px; font-size:.73rem; line-height:1.4; }
+ #view-register .choice-grid { grid-template-columns:minmax(0,1fr); margin-top:15px; }
+ #view-register .choice-card { min-height:66px; }
+ #view-register .reg-sheet h2 { scroll-margin-top:85px; }
+ #legacyRegistration .form-card { grid-area:auto; }
+ #view-register .contact-row { grid-template-columns:minmax(0,1fr); }
+ #view-register .remove-contact { justify-self:start; }
+ #view-register .reg-actions .btn { flex:1 1 auto; }
+ #view-register #receiptStep .submitting { flex-wrap:wrap; justify-content:start; }
+}
+
+#view-register #teamChoices { gap:12px; }
+#view-register #teamChoices .choice-card { min-height:105px; border:1px solid #0002; border-radius:9px; background:var(--team-color); color:var(--team-ink); padding:18px; }
+#view-register #teamChoices .choice-card small,#view-register #teamChoices .choice-card::after { color:inherit; }
+#view-register #teamChoices .team-dot { display:none; }
+#view-register #teamChoices .choice-card strong,#view-register #teamChoices .choice-card small { grid-column:1/3; }
+#view-register #teamChoices .choice-card[aria-pressed=true] { outline:3px solid #232323; outline-offset:3px; }
+#view-register #sportChoices { gap:14px; }
+#view-register #sportChoices .sport-choice { position:relative; display:flex; flex-direction:column; align-items:start; justify-content:end; min-height:210px; border-radius:10px; padding:20px; overflow:hidden; isolation:isolate; color:white; background:#172228; border:0; }
+#view-register .sport-choice .sport-art { position:absolute; inset:0; z-index:-2; background-image:var(--sport-art); background-size:cover; }
+#view-register .sport-choice::before { content:''; position:absolute; inset:0; background:linear-gradient(0deg,#071016 0%,#071016a8 50%,transparent); z-index:-1; }
+#view-register .sport-choice .sport-mascot { position:absolute; top:4px; right:12px; height:125px; width:95px; object-fit:contain; opacity:.9; }
+#view-register #sportChoices .sport-choice small { color:#fff; max-width:95%; position:relative; }
+#view-register #sportChoices .sport-choice strong { color:white; position:relative; margin-top:105px; }
+#view-register #sportChoices .sport-choice::after { display:none; }
+#view-register #sportChoices .sport-choice:disabled { cursor:not-allowed; }
+#view-register #sportChoices .sport-choice:disabled .sport-art { filter:grayscale(1); opacity:.4; }
 </style>
 <script>
 (()=>{'use strict';
@@ -50,15 +132,33 @@ function updateCountdowns(){
 }
 $('registrationForm').addEventListener('submit',async event=>{event.preventDefault();const form=event.target;if(!form.reportValidity())return;const button=form.querySelector('[type=submit]');button.disabled=true;try{const obj={sport:$('regSport').value,type:$('regType').value,agency:$('regAgency').value.trim(),name:$('regName').value.trim(),phone:$('regPhone').value.trim(),team:$('regTeam').value.trim(),email:$('regEmail').value.trim(),note:$('regNote').value.trim(),consent:$('regConsent').checked};const result=await window.Satun.rpc('registerParticipant',obj);form.reset();window.Satun.toast('ส่งใบสมัครแล้ว เลขอ้างอิง: '+result.id)}catch(error){window.Satun.toast(error.message)}finally{button.disabled=false}});
 function selected(collection,id){return (collection||[]).find(x=>x.id===id)}
+function assignment(sport){return (data?.coordinatorAssignments||[]).find(row=>row.team===selectedTeam&&row.sport===sport)}
+function teamInk(color){
+ const rgb=color.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);
+ return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722>.179?'#111111':'#ffffff';
+}
 function renderChoices(){
  if(!data?.teams?.length){$('legacyRegistration').hidden=false;$('coordinatorWizard').hidden=true;const oldSport=$('regSport').value;$('regSport').innerHTML='<option value="">เลือกประเภทกีฬา</option>'+data.sports.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');$('regSport').value=oldSport;return}
  $('legacyRegistration').hidden=true;if(!receipt)$('coordinatorWizard').hidden=false;
- $('teamChoices').innerHTML=data.teams.map(team=>`<button type="button" class="choice-card" data-team="${esc(team.id)}" aria-pressed="${selectedTeam===team.id}" style="--team-color:${/^#[a-f0-9]{6}$/i.test(team.color)?team.color:'#777777'}"><span class="team-dot"></span><strong>${esc(team.name)}</strong><small>${esc(team.agency)}</small></button>`).join('');
- $('sportChoices').innerHTML=data.sports.map(s=>`<button type="button" class="choice-card" data-coordinator-sport="${esc(s.id)}" aria-pressed="${selectedSport===s.id}"><strong>${esc(s.icon)} ${esc(s.name)}</strong><small>ลงทะเบียนผู้รับผิดชอบกีฬา</small></button>`).join('');
+ $('teamChoices').innerHTML=data.teams.map(team=>`<button type="button" class="choice-card" data-team="${esc(team.id)}" aria-pressed="${selectedTeam===team.id}" style="--team-ink:${teamInk(/^#[a-f0-9]{6}$/i.test(team.color)?team.color:'#777777')};--team-color:${/^#[a-f0-9]{6}$/i.test(team.color)?team.color:'#777777'}"><span class="team-dot"></span><strong>${esc(team.name)}</strong><small>${esc(team.agency)}</small></button>`).join('');
+ $('sportChoices').innerHTML=data.sports.map(s=>{
+  const existing=assignment(s.id),ready=Array.isArray(data.coordinatorAssignments);
+  return `<button type="button" class="choice-card sport-choice" data-coordinator-sport="${esc(s.id)}" aria-pressed="${selectedSport===s.id}" ${existing||!ready?'disabled':''} style="--sport-art:url('assets/sport-${esc(s.id)}.svg')"><span class="sport-art" aria-hidden="true"></span><img class="sport-mascot" src="assets/mascot-${esc(s.id)}.svg" alt=""><strong>${esc(s.icon)} ${esc(s.name)}</strong><small>${existing?'ลงทะเบียนแล้ว · '+existing.names.map(esc).join(', ')+' — กรุณาประสานงานผู้รับผิดชอบ':ready?'เปิดรับผู้รับผิดชอบ':'กำลังรอเปิดระบบลงทะเบียน กรุณาติดต่อผู้จัด'}</small></button>`;
+ }).join('');
+
+}
+function showRegistrationStep(index){
+ ['teamStep','sportStep','contactsStep','summaryStep'].forEach((id,i)=>$(id).hidden=i!==index);
+ document.querySelectorAll('[data-reg-step]').forEach(button=>{
+  const step=Number(button.dataset.regStep);
+  button.disabled=locked||(step===1&&!selectedTeam)||(step===2&&!selectedSport)||(step===3&&!requestId);
+  if(step===index)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');
+  button.onclick=()=>{if(!button.disabled)showRegistrationStep(step)};
+ });
 }
 function invalidateSummary(){requestId=null;$('summaryStep').hidden=true;$('coordinatorConsent').checked=false;}
-$('teamChoices').addEventListener('click',event=>{const button=event.target.closest('[data-team]');if(!button||locked)return;selectedTeam=button.dataset.team;selectedSport='';$('sportStep').hidden=false;$('contactsStep').hidden=true;invalidateSummary();renderChoices();$('sportStep').scrollIntoView({behavior:'smooth',block:'start'})});
-$('sportChoices').addEventListener('click',event=>{const button=event.target.closest('[data-coordinator-sport]');if(!button||locked)return;selectedSport=button.dataset.coordinatorSport;$('contactsStep').hidden=false;$('contactsTitle').textContent='3. ผู้รับผิดชอบกีฬา '+selected(data.sports,selectedSport).name;invalidateSummary();renderChoices();$('contactsStep').scrollIntoView({behavior:'smooth',block:'start'})});
+$('teamChoices').addEventListener('click',event=>{const button=event.target.closest('[data-team]');if(!button||locked)return;selectedTeam=button.dataset.team;selectedSport='';$('sportStep').hidden=false;$('contactsStep').hidden=true;invalidateSummary();renderChoices();showRegistrationStep(1);$('sportStep').scrollIntoView({behavior:'smooth',block:'start'})});
+$('sportChoices').addEventListener('click',event=>{const button=event.target.closest('[data-coordinator-sport]');if(!button||locked||button.disabled||assignment(button.dataset.coordinatorSport))return;selectedSport=button.dataset.coordinatorSport;$('contactsStep').hidden=false;$('contactsTitle').textContent='3. ผู้รับผิดชอบกีฬา '+selected(data.sports,selectedSport).name;invalidateSummary();renderChoices();showRegistrationStep(2);$('contactsStep').scrollIntoView({behavior:'smooth',block:'start'})});
 function addContact(name='',phone=''){
  if($('contactRows').children.length>=10)return;
  const row=document.createElement('div');row.className='contact-row';row.innerHTML=`<label>ชื่อ–นามสกุลผู้รับผิดชอบ<input class="contact-name" autocomplete="name" maxlength="100" required value="${esc(name)}"></label><label>เบอร์โทรติดต่อ<input class="contact-phone" type="tel" inputmode="tel" autocomplete="tel" pattern="[0-9+\\- ]{9,15}" maxlength="15" required value="${esc(phone)}"></label><button type="button" class="btn btn-outline remove-contact" aria-label="ลบผู้รับผิดชอบคนนี้">ลบ</button>`;$('contactRows').append(row);syncContactButtons();
@@ -69,17 +169,17 @@ $('contactRows').addEventListener('click',event=>{if(event.target.closest('.remo
 $('contactRows').addEventListener('input',()=>{if(!locked)invalidateSummary()});addContact();
 function contacts(){return [...document.querySelectorAll('#contactRows .contact-row')].map(row=>({name:row.querySelector('.contact-name').value.trim(),phone:row.querySelector('.contact-phone').value.trim()}))}
 function summaryMarkup(value){const team=selected(data.teams,value.team),sport=selected(data.sports,value.sport);return `<h3>${esc(team.name)} • ${esc(sport.name)}</h3><p>${esc(team.agency)}</p><ul>${value.contacts.map(c=>`<li><strong>${esc(c.name)}</strong> — ${esc(c.phone)}</li>`).join('')}</ul>`}
-$('coordinatorForm').addEventListener('submit',event=>{event.preventDefault();if(locked||!selectedTeam||!selectedSport||!event.target.reportValidity())return;if(contacts().some(c=>!c.name||!c.phone))return;requestId=requestId||crypto.randomUUID();$('registrationSummary').innerHTML=summaryMarkup({team:selectedTeam,sport:selectedSport,contacts:contacts()});$('summaryStep').hidden=false;$('coordinatorConsent').checked=false;$('summaryStep').scrollIntoView({behavior:'smooth',block:'start'})});
-$('editCoordinator').addEventListener('click',()=>{if(!locked){invalidateSummary();$('contactsStep').scrollIntoView({behavior:'smooth'})}});
+$('coordinatorForm').addEventListener('submit',event=>{event.preventDefault();if(locked||!selectedTeam||!selectedSport||!event.target.reportValidity())return;if(contacts().some(c=>!c.name||!c.phone))return;requestId=requestId||crypto.randomUUID();$('registrationSummary').innerHTML=summaryMarkup({team:selectedTeam,sport:selectedSport,contacts:contacts()});$('summaryStep').hidden=false;$('coordinatorConsent').checked=false;showRegistrationStep(3);$('summaryStep').scrollIntoView({behavior:'smooth',block:'start'})});
+$('editCoordinator').addEventListener('click',()=>{if(!locked){invalidateSummary();showRegistrationStep(2);$('contactsStep').scrollIntoView({behavior:'smooth'})}});
 function freeze(value){locked=value;document.querySelectorAll('#coordinatorWizard button,#coordinatorWizard input').forEach(el=>el.disabled=value);if(!value)syncContactButtons()}
 $('confirmCoordinator').addEventListener('submit',async event=>{
  event.preventDefault();if(locked||!requestId||!event.target.reportValidity()||!$('coordinatorConsent').checked)return;
  const payload={team:selectedTeam,sport:selectedSport,contacts:contacts(),consent:true,requestId};freeze(true);$('registrationError').textContent='';
- try{receipt=await window.Satun.rpc('registerCoordinator',payload);$('coordinatorWizard').hidden=true;const team=selected(data.teams,receipt.team);$('registrationReceipt').style.setProperty('--team-color',team.color);const mascot=document.querySelector('.hero-mascot').src;$('registrationReceipt').innerHTML=`<img class="receipt-mascot" src="${esc(mascot)}" alt="มาสคอตกีฬา"><div class="eyebrow">SATUN SPORTS 2570</div><h2>ลงทะเบียนสำเร็จ ✓</h2>${summaryMarkup(receipt)}<p>${esc(dateLabel(receipt.created))}</p><small>เลขอ้างอิง <span class="receipt-code">${esc(receipt.id)}</span></small>`;$('receiptStep').hidden=false;$('receiptStep').scrollIntoView({behavior:'smooth',block:'start'});}
- catch(error){$('registrationError').textContent=error.message+' — ข้อมูลยังอยู่ สามารถลองส่งอีกครั้งได้';}
+ try{receipt=await window.Satun.rpc('registerCoordinator',payload);data.coordinatorAssignments=(data.coordinatorAssignments||[]).concat({team:receipt.team,sport:receipt.sport,names:receipt.contacts.map(c=>c.name)});$('coordinatorWizard').hidden=true;const team=selected(data.teams,receipt.team);$('registrationReceipt').style.setProperty('--team-color',team.color);const mascot=document.querySelector('.hero-mascot').src;$('registrationReceipt').innerHTML=`<img class="receipt-mascot" src="${esc(mascot)}" alt="มาสคอตกีฬา"><div class="eyebrow">SATUN SPORTS 2570</div><h2>ลงทะเบียนสำเร็จ ✓</h2>${summaryMarkup(receipt)}<p>${esc(dateLabel(receipt.created))}</p><small>เลขอ้างอิง <span class="receipt-code">${esc(receipt.id)}</span></small>`;$('receiptStep').hidden=false;$('receiptStep').scrollIntoView({behavior:'smooth',block:'start'});}
+ catch(error){window.Satun.refresh().catch(()=>{});$('registrationError').textContent=error.message+' — ข้อมูลยังอยู่ สามารถลองส่งอีกครั้งได้';}
  finally{freeze(false)}
 });
-$('newCoordinator').addEventListener('click',()=>{selectedTeam='';selectedSport='';receipt=null;requestId=null;$('receiptStep').hidden=true;$('coordinatorWizard').hidden=false;$('sportStep').hidden=true;$('contactsStep').hidden=true;invalidateSummary();$('contactRows').innerHTML='';addContact();renderChoices();$('teamStep').scrollIntoView({behavior:'smooth'})});
+$('newCoordinator').addEventListener('click',()=>{selectedTeam='';selectedSport='';receipt=null;requestId=null;$('receiptStep').hidden=true;$('coordinatorWizard').hidden=false;$('sportStep').hidden=true;$('contactsStep').hidden=true;invalidateSummary();$('contactRows').innerHTML='';addContact();renderChoices();showRegistrationStep(0);$('teamStep').scrollIntoView({behavior:'smooth'})});
 async function saveReceipt(type){
  if(!receipt)return;const button=type==='png'?$('savePng'):$('saveJpg');button.disabled=true;
  try{

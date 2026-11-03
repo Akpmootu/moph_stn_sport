@@ -39,6 +39,8 @@ function registerCoordinator(data){
  return locked_(()=>{
   const previous=rows_('CoordinatorLog').find(r=>r.requestId===requestId);
   if(previous){if(previous.team!==team||previous.sport!==sport||previous.contacts!==contacts)throw new Error('รหัสคำขอถูกใช้แล้ว');return {id:previous.id,team,sport,contacts:JSON.parse(contacts),created:previous.created};}
+  const occupied=coordinatorAssignments_().find(row=>row.team===team&&row.sport===sport);
+  if(occupied)throw new Error('รายการนี้ลงทะเบียนแล้ว กรุณาประสานงานกับ '+occupied.names.join(', '));
   const record={id:Utilities.getUuid(),requestId,team,sport,contacts,created:new Date().toISOString(),action:'create',actor:'public'};
   append_('CoordinatorLog',record);return {...record,contacts:JSON.parse(contacts)};
  });
@@ -94,4 +96,18 @@ function updateNews(data){
  const type=text_(data.type,40);if(!['ข่าว','ประกาศ','รายงานกิจกรรม'].includes(type))throw new Error('หมวดข่าวไม่ถูกต้อง');
  const obj={...original,title:text_(data.title,200),body:text_(data.body,10000),type};
  return locked_(()=>{upsert_('News','id',obj);return {ok:true}});
+}
+
+function coordinatorAssignments_(){
+ const latest=new Map();
+ rows_('CoordinatorLog').forEach(row=>latest.set(row.id,row));
+ const assignments=new Map();
+ latest.forEach(row=>{
+  const key=row.team+':'+row.sport;
+  let names=[];try{names=JSON.parse(row.contacts).map(contact=>String(contact.name))}catch{}
+  if(!assignments.has(key))assignments.set(key,{team:row.team,sport:row.sport,names:[]});
+  const entry=assignments.get(key);
+  entry.names=[...new Set(entry.names.concat(names))];
+ });
+ return [...assignments.values()];
 }

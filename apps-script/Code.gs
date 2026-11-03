@@ -101,7 +101,7 @@ function doGet(e) {
   return HtmlService.createHtmlOutput(html).setTitle('กีฬา สา’สุข สตูล 2570').addMetaTag('viewport','width=device-width, initial-scale=1');
 }
 function getPublicData() {
-  return {teams:TEAM_COLORS,events:publicEvents_(),sports:rows_('Sports').map(s=>({...s,dates:JSON.parse(s.dates)})),articles:rows_('News').reverse(),scores:rows_('Scores'),isAdmin:Session.getActiveUser().getEmail().toLowerCase()===OWNER_EMAIL};
+  return {coordinatorAssignments:coordinatorAssignments_(),teams:TEAM_COLORS,events:publicEvents_(),sports:rows_('Sports').map(s=>({...s,dates:JSON.parse(s.dates)})),articles:rows_('News').reverse(),scores:rows_('Scores'),isAdmin:Session.getActiveUser().getEmail().toLowerCase()===OWNER_EMAIL};
 }
 function text_(value,max,required=true) {
   if (typeof value!=='string' || value.length>max || (required&&!value.trim())) throw new Error('ข้อมูลไม่ครบหรือยาวเกินกำหนด');

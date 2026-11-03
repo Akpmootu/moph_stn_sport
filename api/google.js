@@ -17,6 +17,13 @@ module.exports = async function handler(req, res) {
     return res.status(503).json({ok:false,error:'ยังไม่ได้ตั้งค่า GOOGLE_APPS_SCRIPT_URL ของ Web app ใน Vercel'});
   }
   try {
+    if (body.method==='registerCoordinator') {
+      const check=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({method:'getPublicData',args:[]}),redirect:'follow',signal:AbortSignal.timeout(25000)});
+      const availability=await check.json();
+      if(!check.ok||!availability.ok||!Array.isArray(availability.data?.coordinatorAssignments)) {
+        return res.status(503).json({ok:false,error:'ระบบลงทะเบียนรออัปเดต Google Apps Script กรุณาติดต่อผู้จัด'});
+      }
+    }
     const upstream=await fetch(endpoint, {
       method:'POST', headers:{'Content-Type':'application/json'},
       body:JSON.stringify({method:body.method,args:body.args}),
@@ -29,7 +36,7 @@ module.exports = async function handler(req, res) {
     // Never forward an admin flag or private collections through the public site.
     if (body.method==='getPublicData') {
       if (!Array.isArray(result.data.sports)||!Array.isArray(result.data.articles)||!Array.isArray(result.data.scores)) throw new Error('Invalid public data');
-      return res.status(200).json({ok:true,data:{sports:result.data.sports,articles:result.data.articles,scores:result.data.scores,teams:result.data.teams,events:result.data.events,isAdmin:false}});
+      return res.status(200).json({ok:true,data:{sports:result.data.sports,articles:result.data.articles,scores:result.data.scores,coordinatorAssignments:result.data.coordinatorAssignments,teams:result.data.teams,events:result.data.events,isAdmin:false}});
     }
     return res.status(200).json(result);
   } catch {
